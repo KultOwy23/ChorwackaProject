@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "ChorwackaProject backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/KultOwy23/ChorwackaProject.git"
+  },
+  "keywords": [
+    "ChorwackaProject",
+    "rentcosts",
+    "costs",
+    "housemates"
+  ],
+  "author": "Jędrzej Zawojski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KultOwy23/ChorwackaProject/issues"
+  },
+  "homepage": "https://github.com/KultOwy23/ChorwackaProject#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
