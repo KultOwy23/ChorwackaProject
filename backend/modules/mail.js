@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const TokenParser = require('token-parser');
+const CONFIG = require('../config/config');
 
 class MailDecorator {
     constructor(filePath) {
@@ -23,10 +24,10 @@ class MyMailer {
     constructor() {
         this.mailDecorator = new MailDecorator('./templates/mail_body.html');
         this.transporter = nodemailer.createTransport({
-            service: MAIL_SERVICE,
+            service: CONFIG.EMAIL_SERVICE,
             auth: {
-                user: MAIL_ADDRESS,
-                pass: MAIL_PASSWORD
+                user: CONFIG.EMAIL_ADDRESS,
+                pass: CONFIG.EMAIL_PASSWORD
             }
         });
     };
@@ -82,14 +83,13 @@ class MyMailer {
         }
         const mailBody = this.mailDecorator.buildMail(params);
         const mailTitle = `Rozliczenie za ${params.month}`;
-
         var mailOptions = {
-            from: MAIL_PASSWORD,
+            from: CONFIG.EMAIL_ADDRESS,
             to: mailTo,
             subject: mailTitle,
             html: mailBody 
         } 
-
+        console.log(mailOptions.from);
         this.transporter.sendMail(mailOptions, function(error, info) {
             if(error) {
                 return console.log(error);

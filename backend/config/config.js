@@ -1,8 +1,11 @@
-module.exports = {
-    DB: process.env.MONGO_URL ? process.env.MONGO_URL: 'mongodb://localhost:27017/rentbills',
-    APP_PORT: process.env.APP_PORT ? process.env.APP_PORT : 3000,
-    APP_HOST: process.env.APP_HOST ? process.env.APP_HOST : '127.0.0.1',
-    EMAIL_ADDRESS: process.env.EMAIL_ADDRESS ? process.env.EMAIL_ADDRESS : null,
-    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : null
+const dotenv = require('dotenv');
+dotenv.config();
 
+module.exports = {
+    DB: process.env.MONGO_URL,
+    APP_PORT: process.env.APP_PORT,
+    APP_HOST: process.env.APP_HOST,
+    EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+    EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
 };
