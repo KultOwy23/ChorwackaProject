@@ -1,21 +1,116 @@
-<h1>Witaj [name],</h1>
-<p>Poniżej przesyłamy rozliczenie za miesiąc: [month].</p>
-
-<table>
-    <tr>
-        <th>Media</th>
-        <th>Stan poprzedni</th>
-        <th>Stan aktualny</th>
-        <th>Różnica</th>
-        <th>Cena (1 jednostki)</th>
-        <th>Do zapłaty</th>
-    </tr>
-    <tr>
-        <td>Prąd</td>
-        <td>1000</td>
-        <td>1100</td>
-        <td>50</td>
-        <td>10,60</td>
-        <td>70</td>
-    </tr>
-</table>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            table {width: 80%; border-collapse: collapse;}
+            table, th, tr , td{border: 1px solid black;}
+            th, td {text-align: center;}
+        </style>
+    </head>
+    <body>
+        <h1>Witaj [name],</h1>
+        <p>Poniżej przesyłamy rozliczenie za miesiąc: <b>[month]</b>.</p>
+        <h3>Media</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Media</th>
+                <th colspan='2' scope='colgroup'>Stan licznika</th>
+                <th rowspan='2'>Różnica</th>
+                <th rowspan='2'>Stawka (zł/jednostkę)</th>
+                <th rowspan='2'>Do zapłaty (zł)</th>
+            </tr>
+            <tr>
+                <th scope='col'>Poprzedni</th>
+                <th scope='col'>Aktualny</th>
+            </tr>
+            <tr>
+                <td>Prąd</td>
+                <td>[bill.energy.prev]</td>
+                <td>[bill.energy.curr]</td>
+                <td>[bill.energy.diff]</td>
+                <td>[prices.energy]</td>
+                <td>[bill.energy.cost]</td>
+            </tr>
+            <tr>
+                <td>Ciepła woda</td>
+                <td>[bill.hotwater.prev]</td>
+                <td>[bill.hotwater.curr]</td>
+                <td>[bill.hotwater.diff]</td>
+                <td>[prices.hotwater]</td>
+                <td>[bill.hotwater.cost]</td>
+            </tr>
+            <tr>
+                <td>Zimna woda</td>
+                <td>[bill.coldwater.prev]</td>
+                <td>[bill.coldwater.curr]</td>
+                <td>[bill.coldwater.diff]</td>
+                <td>[prices.coldwater]</td>
+                <td>[bill.coldwater.cost]</td>
+            </tr>
+            <tr>
+                <td>Gaz</td>
+                <td>[bill.gas.prev]</td>
+                <td>[bill.gas.curr]</td>
+                <td>[bill.gas.diff]</td>
+                <td>[prices.energy]</td>
+                <td>[bill.gas.cost]</td>
+            </tr>
+        </table>
+        </br>
+        <hr>
+        </br>
+        <h3>Ogrzewanie</h3>
+        <table style='width:50%'>
+            <tr>
+                <th>Pokój</th>
+                <th>Stan akt.</th>
+                <th>Stan poprz.</th>
+                <th>Różnica</th>
+                <th>Kwota (zł)</th>
+            </tr>
+            <tr>
+                <td>Pokój 1</td>
+                <td>[heat.room1.curr]</td>
+                <td>[heat.room1.prev]</td>
+                <td>[heat.room1.diff]</td>
+                <td>[heat.room1.cost]</td>
+            </tr>
+            <tr>
+                <td>Pokój 2</td>
+                <td>[heat.room2.curr]</td>
+                <td>[heat.room2.prev]</td>
+                <td>[heat.room2.diff]</td>
+                <td>[heat.room2.cost]</td>
+            </tr>
+            <tr>
+                <td>Pokój 3</td>
+                <td>[heat.room3.curr]</td>
+                <td>[heat.room3.prev]</td>
+                <td>[heat.room3.diff]</td>
+                <td>[heat.room3.cost]</td>
+            </tr>
+            <tr>
+                <td>Kuchnia</td>
+                <td>[heat.kitchen.curr]</td>
+                <td>[heat.kitchen.prev]</td>
+                <td>[heat.kitchen.diff]</td>
+                <td>[heat.kitchen.cost]</td>
+            </tr>
+        </table>
+        </br>
+        <hr>
+        </br>
+        <h3>Dodatkowe informacje:</h3>
+        <p> [comment]</p>
+        </br>
+        <hr>
+        </br>
+        <p><b>Razem za media: </b>[bill.totalCost] zł</p>
+        <p><b>Razem za ogrzewanie: </b>[heat.totalCost] zł</p>
+        <p><b>Kwota czynszu: </b>[rent] zł</p>
+        <p><b>Razem do zapłaty: </b>[totalCost] zł</p>
+        </br>
+        <p>Pozdrawiam,</p>
+        <p>Jędrzej</p>
+    </body>
+</html>
