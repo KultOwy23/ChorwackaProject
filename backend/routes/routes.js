@@ -2,17 +2,27 @@ const express = require('express');
 const app = express.Router();
 
 const mail = require('../modules/mail');
-// const dbCtrl = require('../modules/database');
+const builder = require('../modules/raport_builder');
 
-const myMailer = new mail.MyMailer();
+const mailer = new mail.MyMailer();
 
+const userRepository = require('../repositories/UserRepository');
 
-app.get('/sendraport/:monthid', (req,res) =>  {
-    myMailer.sendMail('jedrzej.zawojski95@gmail.com');
-    res.send('Message send');
+app.get('/sendraport', (_,res) =>  {
+    let mailBody = "";
+    const raportBuilder = new builder.RaportBuilder();
+    const mailTitle = raportBuilder.loadRaportData("02/2020");
+    
+    userRepository.findAll().then((users) => {
+        users.forEach(user => {
+            mailBody = raportBuilder.createRaport(user);
+            mailer.sendMail(user.email,mailTitle,mailBody);
+        });
+        res.send('Mail sent');
+    })
 })
 app.get('/sendmail', (req, res) => {
-    myMailer.sendMail('jedrzej.zawojski95@gmail.com');
+    // myMailer.sendMail('jedrzej.zawojski95@gmail.com');
     res.send('Message sent');
 })
 app.get('/bill/:monthid', (req, res) => res.send());

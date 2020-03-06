@@ -8,8 +8,8 @@
         </style>
     </head>
     <body>
-        <h1>Witaj [name],</h1>
-        <p>Poniżej przesyłamy rozliczenie za miesiąc: <b>[month]</b>.</p>
+        <h1>Witaj [user.name],</h1>
+        <p>Poniżej przesyłamy rozliczenie za miesiąc: <b>[month.name]/[month.year]</b>.</p>
         <h3>Media</h3>
         <table>
             <tr>
@@ -101,14 +101,14 @@
         <hr>
         </br>
         <h3>Dodatkowe informacje:</h3>
-        <p> [comment]</p>
+        <p> [month.comment]</p>
         </br>
         <hr>
         </br>
-        <p><b>Razem za media: </b>[bill.totalCost] zł</p>
-        <p><b>Razem za ogrzewanie: </b>[heat.totalCost] zł</p>
-        <p><b>Kwota czynszu: </b>[rent] zł</p>
-        <p><b>Razem do zapłaty: </b>[totalCost] zł</p>
+        <p><b>Razem za media: </b>[month.total_bill] zł</p>
+        <p><b>Razem za ogrzewanie: </b>[month.total_heat] zł</p>
+        <p><b>Kwota czynszu: </b>[prices.rent] zł</p>
+        <p><b>Razem do zapłaty: </b>[month.total_rent] zł</p>
         </br>
         <p>Pozdrawiam,</p>
         <p>Jędrzej</p>
