@@ -2,13 +2,31 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const heatingSchema = new Schema({
-    monthid: {
-        type: String,
+    monthId: String,
+    room1: {
+        value: Number,
+        reset: Number,
+        usage: Number,
+        cost: Number
     },
-    room1: {},
-    room2: {},
-    room3: {},
-    kitchen: {}
+    room2: {
+        value: Number,
+        reset: Number,
+        usage: Number,
+        cost: Number
+    },
+    room3: {
+        value: Number,
+        reset: Number,
+        usage: Number,
+        cost: Number
+    },
+    kitchen: {
+        value: Number,
+        reset: Number,
+        usage: Number,
+        cost: Number
+    }
 });
 
 const Heating = mongoose.model('Heating',heatingSchema);

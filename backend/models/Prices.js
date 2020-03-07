@@ -2,23 +2,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const pricesSchema = new Schema({
-    energy: {
-        type: Number,
-    },
-    hot_water: {
-        type: Number,
-    },
-    cold_water: {
-        type: Number,
-    },
-    gas: {
-        type: Number,
-    },
-    rent: {
-        type: Number,
-    },
-    network: {
-        type: Number,
+    energy: Number,
+    hot_water: Number,
+    cold_water: Number,
+    gas: Number,
+    heating: Number,
+    rent: Number,
+    network: Number,
+    validFrom: {
+        type: Date,
+        default: Date.now()
     }
 });
 

@@ -2,7 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <style>
-            table {width: 80%; border-collapse: collapse;}
+            table {width: 50%; border-collapse: collapse;}
             table, th, tr , td{border: 1px solid black;}
             th, td {text-align: center;}
         </style>
@@ -13,45 +13,37 @@
         <h3>Media</h3>
         <table>
             <tr>
-                <th rowspan='2'>Media</th>
-                <th colspan='2' scope='colgroup'>Stan licznika</th>
-                <th rowspan='2'>Różnica</th>
-                <th rowspan='2'>Stawka (zł/jednostkę)</th>
-                <th rowspan='2'>Do zapłaty (zł)</th>
-            </tr>
-            <tr>
-                <th scope='col'>Poprzedni</th>
-                <th scope='col'>Aktualny</th>
+                <th>Media</th>
+                <th>Stan licznika</th>
+                <th>Różnica</th>
+                <th>Stawka (zł/jednostkę)</th>
+                <th>Do zapłaty (zł)</th>
             </tr>
             <tr>
                 <td>Prąd</td>
-                <td>[bill.energy.prev]</td>
-                <td>[bill.energy.curr]</td>
-                <td>[bill.energy.diff]</td>
+                <td>[bill.energy.value]</td>
+                <td>[bill.energy.usage]</td>
                 <td>[prices.energy]</td>
                 <td>[bill.energy.cost]</td>
             </tr>
             <tr>
                 <td>Ciepła woda</td>
-                <td>[bill.hotwater.prev]</td>
-                <td>[bill.hotwater.curr]</td>
-                <td>[bill.hotwater.diff]</td>
-                <td>[prices.hotwater]</td>
-                <td>[bill.hotwater.cost]</td>
+                <td>[bill.hot_water.value]</td>
+                <td>[bill.hot_water.usage]</td>
+                <td>[prices.hot_water]</td>
+                <td>[bill.hot_water.cost]</td>
             </tr>
             <tr>
                 <td>Zimna woda</td>
-                <td>[bill.coldwater.prev]</td>
-                <td>[bill.coldwater.curr]</td>
-                <td>[bill.coldwater.diff]</td>
-                <td>[prices.coldwater]</td>
-                <td>[bill.coldwater.cost]</td>
+                <td>[bill.cold_water.value]</td>
+                <td>[bill.cold_water.usage]</td>
+                <td>[prices.cold_water]</td>
+                <td>[bill.cold_water.cost]</td>
             </tr>
             <tr>
                 <td>Gaz</td>
-                <td>[bill.gas.prev]</td>
-                <td>[bill.gas.curr]</td>
-                <td>[bill.gas.diff]</td>
+                <td>[bill.gas.value]</td>
+                <td>[bill.gas.usage]</td>
                 <td>[prices.energy]</td>
                 <td>[bill.gas.cost]</td>
             </tr>
@@ -60,48 +52,49 @@
         <hr>
         </br>
         <h3>Ogrzewanie</h3>
+        <p>Stawka za ogrzewanie: <b>[prices.heating]</b> zł </p>
         <table style='width:50%'>
             <tr>
                 <th>Pokój</th>
-                <th>Stan akt.</th>
-                <th>Stan poprz.</th>
-                <th>Różnica</th>
+                <th>Przed resetem</th>
+                <th>Stan licznika</th>
+                <th>Zużycie</th>
                 <th>Kwota (zł)</th>
             </tr>
             <tr>
                 <td>Pokój 1</td>
-                <td>[heat.room1.curr]</td>
-                <td>[heat.room1.prev]</td>
-                <td>[heat.room1.diff]</td>
-                <td>[heat.room1.cost]</td>
+                <td>[heating.room1.reset]</td>
+                <td>[heating.room1.value]</td>
+                <td>[heating.room1.usage]</td>
+                <td>[heating.room1.cost]</td>
             </tr>
             <tr>
                 <td>Pokój 2</td>
-                <td>[heat.room2.curr]</td>
-                <td>[heat.room2.prev]</td>
-                <td>[heat.room2.diff]</td>
-                <td>[heat.room2.cost]</td>
+                <td>[heating.room2.reset]</td>
+                <td>[heating.room2.value]</td>
+                <td>[heating.room2.usage]</td>
+                <td>[heating.room2.cost]</td>
             </tr>
             <tr>
                 <td>Pokój 3</td>
-                <td>[heat.room3.curr]</td>
-                <td>[heat.room3.prev]</td>
-                <td>[heat.room3.diff]</td>
-                <td>[heat.room3.cost]</td>
+                <td>[heating.room3.reset]</td>
+                <td>[heating.room3.value]</td>
+                <td>[heating.room3.usage]</td>
+                <td>[heating.room3.cost]</td>
             </tr>
             <tr>
                 <td>Kuchnia</td>
-                <td>[heat.kitchen.curr]</td>
-                <td>[heat.kitchen.prev]</td>
-                <td>[heat.kitchen.diff]</td>
-                <td>[heat.kitchen.cost]</td>
+                <td>[heating.kitchen.reset]</td>
+                <td>[heating.kitchen.value]</td>
+                <td>[heating.kitchen.usage]</td>
+                <td>[heating.kitchen.cost]</td>
             </tr>
         </table>
         </br>
         <hr>
         </br>
         <h3>Dodatkowe informacje:</h3>
-        <p> [month.comment]</p>
+        <p>  [month.comment]</p>
         </br>
         <hr>
         </br>
@@ -109,6 +102,7 @@
         <p><b>Razem za ogrzewanie: </b>[month.total_heat] zł</p>
         <p><b>Kwota czynszu: </b>[prices.rent] zł</p>
         <p><b>Razem do zapłaty: </b>[month.total_rent] zł</p>
+        [roomatesection]
         </br>
         <p>Pozdrawiam,</p>
         <p>Jędrzej</p>

@@ -29,7 +29,7 @@ app.put('/:id',(req,res) => {
     const { id } = req.params;
     const {user} = req.body;
     repository.updateById(id, user)
-        .then(res.status(200).json([]))
+        .then(res.status(200).json(['ok']))
         .catch((error) => console.log(error));
 })
 

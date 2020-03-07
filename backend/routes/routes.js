@@ -8,18 +8,13 @@ const mailer = new mail.MyMailer();
 
 const userRepository = require('../repositories/UserRepository');
 
-app.get('/sendraport', (_,res) =>  {
-    let mailBody = "";
-    const raportBuilder = new builder.RaportBuilder();
-    const mailTitle = raportBuilder.loadRaportData("02/2020");
-    
+app.get('/sendraport/:monthcode', (req,res) =>  {
+    const { monthcode } = req.params
     userRepository.findAll().then((users) => {
-        users.forEach(user => {
-            mailBody = raportBuilder.createRaport(user);
-            mailer.sendMail(user.email,mailTitle,mailBody);
-        });
-        res.send('Mail sent');
-    })
+        console.log(`Sending to users: ${users}`);
+        mailer.sendRaport(monthcode, users);      
+        res.status(200).json('Messages sent');
+    }).catch((error) => console.log(error));
 })
 app.get('/sendmail', (req, res) => {
     // myMailer.sendMail('jedrzej.zawojski95@gmail.com');

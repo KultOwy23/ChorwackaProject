@@ -1,4 +1,5 @@
 const mailTemplatePath = './templates/mail_body.html';
+const sectionTemplatePath = './templates/roomate_section.html';
 const fs = require('fs');
 const TokenParser = require('token-parser');
 const Repositories = require('../repositories/Repositories');
@@ -14,38 +15,57 @@ class RaportBuilder {
         this.params = {};
     }
 
-    loadRaportData(monthid) {
-        let title = `Rozliczenie za miesiąc ${monthid}`;;
-        console.log(`LoadRaportdata ${monthid}`);
-        MonthRepository.findByMonthId(monthid).then((months) => {
-            console.log(`Month: ${months}`);
-            this.params.month = months;
-            title = `Rozliczenie za miesiąc ${months.name}`;
+    async loadRaportData(month_code) {
+        console.log(`LoadRaportdata ${month_code}`);
+        await MonthRepository.findByMonthCode(month_code).then((month) => {
+            this.params.month = month;
+            this.month_id = month._id;
         }).catch((err) => console.log(err));
-        BillsRepository.findByMonthId(monthid).then((bills) => {
-            console.log(`Bills: ${bills}`);
-            // this.params.bills = bills;
-        }).catch((err) => console.log(err));
-        HeatingRepository.findByMonthId(monthid).then((heating) => {
-            console.log(`Heating: ${heating}`);
-            // this.params.heating = heating;
-        }).catch((err) => console.log(err));
-        PricesRepository.findAll().then((prices) => {
-            console.log(`Prices: ${prices}`);
-        }).catch((err) => console.log(err));
+        await PricesRepository.findOne().then((prices) => {
+            this.params.prices = prices;
+        }).catch((error) => console.log(error));
+        await BillsRepository.findByMonthId(this.month_id).then((bill) => {
+            this.params.bill = bill;
+        }).catch((error) => console.log(error));
+        await HeatingRepository.findByMonthId(this.month_id).then((heating) => {
+            this.params.heating = heating;
+        }).catch((error) => console.log(error));
+    }
 
-        return title;
+    buildRoomateSection(user) {
+        if(user.role == "roomate") {
+            let roomKey = `room${user.room}`;
+            let month = this.params.month;
+            let prices = this.params.prices;
+            let heating = this.params.heating;
+            this.params.user_rent = ((month.total_rent + prices.network) * user.rent_share).toFixed(2)*1;
+            this.params.user_heating = heating[roomKey].cost;
+            if(user.room == 2) {
+                this.params.user_heating = this.params.user_heating/2;
+            }
+            this.params.user_bill = (this.params.user_rent + this.params.user_heating).toFixed(2)*1;
+            let section = fs.readFileSync(sectionTemplatePath, 'utf8', (err, data) => {
+                if(err) throw err;
+                console.log(typeof data);
+            });
+
+            let userSection = this.parser.replace(section,this.params);
+            return userSection;
+        } else {
+            return "";
+        }
     }
 
     createRaport(user) {
         this.params.user = user;
-        console.log(this.params);
+        this.params.roomatesection = this.buildRoomateSection(user);
         this.raportBody = fs.readFileSync(mailTemplatePath, 'utf8', (err, data) => {
             if(err) throw err;
             console.log(typeof data);
         });
         let raport = this.parser.replace(this.raportBody, this.params);
-        return raport;
+        let title = `[Chorwacka 6/4] rozliczenie za miesiąc${this.params.month.name}/${this.params.month.year}`;
+        return {subject: title, body: raport};
     }
 }
 

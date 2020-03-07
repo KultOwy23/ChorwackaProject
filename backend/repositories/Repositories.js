@@ -3,6 +3,42 @@ const Month = require('../models/Months');
 const Prices = require('../models/Prices');
 const Heating = require('../models/Heatings');
 
+class MonthRepo {
+    constructor(model) {
+        this.model = model;
+    }
+
+    create(newMonth) {
+        const month = new this.model(newMonth);
+        return month.save();
+    }
+
+    findAll() {
+        return this.model.find();
+    }
+
+    findById(id) {
+        return this.model.findById(id);
+    }
+
+    findByMonthCode(monthCode) {
+        const query = {month_code: monthCode};
+        return this.model.findOne(query);
+    }
+
+    updateById(id, object) {
+        const query = { _id: id};
+        return this.model.findOneAndUpdate(query, {$set: object});
+    }
+
+    updateByMonthCode(monthCode, object) {
+        const query = {month_code: monthCode};
+        return this.model.findOneAndUpdate(query, {$set: object});
+    }
+    deleteById(id) {
+        return this.model.findByIdAndDelete(id);
+    }
+}
 class ModelRepository{
     constructor(model) {
         this.model = model;
@@ -17,11 +53,12 @@ class ModelRepository{
     findById(id) {
         return this.model.findById(id);
     }
-    findByMonthId(monthid) {
-        const query = {monthid: monthid};
+    findByMonthId(monthId) {
+        const query = {monthId: monthId};
         return this.model.findOne(query);
     }
     deleteById(id) {
+        // console.log(`Delete by id: ${id} Type: ${typeof(id)}`);
         return this.model.findByIdAndDelete(id);
     }
     updateById(id, object) {
@@ -63,7 +100,7 @@ class PriceRepo{
     }
 };
 
-const MonthRepository = new ModelRepository(Month);
+const MonthRepository = new MonthRepo(Month);
 const BillsRepository = new ModelRepository(Bill);
 const HeatingRepository = new ModelRepository(Heating);
 

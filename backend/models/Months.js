@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const monthSchema = new Schema({
-    monthid: {
-        type: String,
+    create_date: {
+        type: Date,
+        default: Date.now,
     },
+    month_code: String,
     name: {
         type: String,
     },

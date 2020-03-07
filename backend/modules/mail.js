@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const CONFIG = require('../config/config');
 
+const builder = require('./raport_builder');
+
 class MyMailer {
     constructor() {
         // this.mailDecorator = new MailDecorator('./templates/mail_body.html');
@@ -13,21 +15,37 @@ class MyMailer {
         });
     };
 
-    sendMail = function(mailTo, mailTitle, mailBody) {
-        var mailOptions = {
-            from: CONFIG.EMAIL_ADDRESS,
-            to: mailTo,
-            subject: mailTitle,
-            html: mailBody 
-        } 
-        this.transporter.sendMail(mailOptions, function(error, info) {
-            if(error) {
-                return console.log(error);
+    async sendRaport(monthcode, users) {
+        let raportBuilder = new builder.RaportBuilder();
+        raportBuilder.loadRaportData(monthcode).then( async () => {
+            for(let i = 0; i< users.length; i++) {
+                let user = users[i];
+                console.log(`Send mailto: ${user.email}`);
+                let raport = raportBuilder.createRaport(user);
+                let mailOptions = {
+                    from: CONFIG.EMAIL_ADDRESS,
+                    to: user.email,
+                    subject: raport.subject,
+                    html: raport.body 
+                } 
+                await this.sendMail(mailOptions);
             }
-            console.log('Message sent: '+info.response);
-            return;
-        })
+        }).catch((error) => console.log(error));
 
+    }
+    
+    async sendMail(mailOptions) {
+        return new Promise((resolve, reject ) => {
+            this.transporter.sendMail(mailOptions, (err, info) => {
+                if(err) {
+                    console.log(`Error: ${err}`);
+                    reject(err);
+                } else {
+                    console.log(`Mail sent successfully!`);
+                    resolve(info);
+                }
+            });
+        });
     }
 }
 

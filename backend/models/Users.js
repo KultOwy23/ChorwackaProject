@@ -2,20 +2,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-    },
-    lastName: {
-        type: String,
-    },
-    email: {
-        type: String,
-    },
+    name: String,
+    lastName: String,
+    email: String,
+    room: Number,
+    rent_share: Number,
     role: {
         type: String,
-    },
-    rent_share: {
-        type: Number,
+        default: "roomate",
     }
 });
 

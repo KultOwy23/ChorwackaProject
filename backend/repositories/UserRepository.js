@@ -25,14 +25,7 @@ class UserRepository {
 
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.findOneAndUpdate(query, { 
-            $set: {
-                name: object.name, 
-                lastName: object.lastName, 
-                email: object.email, 
-                role: object.role, 
-                rent_share: object.rent_share
-            }});
+        return this.model.findOneAndUpdate(query, object);
     }
 
     updateByEmail(emailAddress, object) {
