@@ -64,7 +64,7 @@ class RaportBuilder {
             console.log(typeof data);
         });
         let raport = this.parser.replace(this.raportBody, this.params);
-        let title = `[Chorwacka 6/4] rozliczenie za miesiąc${this.params.month.name}/${this.params.month.year}`;
+        let title = `[Chorwacka 6/4] rozliczenie za miesiąc: ${this.params.month.name}/${this.params.month.year}`;
         return {subject: title, body: raport};
     }
 }

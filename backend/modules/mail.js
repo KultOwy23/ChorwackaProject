@@ -15,6 +15,20 @@ class MyMailer {
         });
     };
 
+    async sendRaportToUser(monthcode, user) {
+        let raportBuilder = new builder.RaportBuilder();
+        raportBuilder.loadRaportData(monthcode).then(async () => {
+            let raport = raportBuilder.createRaport(user);
+            let mailOptions = {
+                from: CONFIG.EMAIL_ADDRESS,
+                to: user.email,
+                subject: raport.subject,
+                html: raport.body 
+            };
+            await this.sendMail(mailOptions);
+        }).catch((error) => console.log(error));
+    }
+
     async sendRaport(monthcode, users) {
         let raportBuilder = new builder.RaportBuilder();
         raportBuilder.loadRaportData(monthcode).then( async () => {

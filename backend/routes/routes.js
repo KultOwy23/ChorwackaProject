@@ -16,9 +16,14 @@ app.get('/sendraport/:monthcode', (req,res) =>  {
         res.status(200).json('Messages sent');
     }).catch((error) => console.log(error));
 })
-app.get('/sendmail', (req, res) => {
-    // myMailer.sendMail('jedrzej.zawojski95@gmail.com');
-    res.send('Message sent');
+app.get('/sendraport/:monthcode/user/:userid', (req, res) => {
+    const { userid } = req.params;
+    const { monthcode } = req.params;
+    userRepository.findById(userid).then((user) => {
+        mailer.sendRaportToUser(monthcode, user);
+        console.log(`Send mail ${monthcode} to ${user.name}`);
+        res.send('Message sent');
+    }).catch((error) => console.log(error));
 })
 app.get('/bill/:monthid', (req, res) => res.send());
 app.put('/bill/:monthid', (req, res) => res.send());
