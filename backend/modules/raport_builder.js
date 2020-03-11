@@ -38,7 +38,7 @@ class RaportBuilder {
             let month = this.params.month;
             let prices = this.params.prices;
             let heating = this.params.heating;
-            this.params.user_rent = ((month.total_rent + prices.network) * user.rent_share).toFixed(2)*1;
+            this.params.user_rent = (((month.total_rent - month.total_heat) + prices.network) * user.rent_share).toFixed(2)*1;
             this.params.user_heating = heating[roomKey].cost;
             if(user.room == 2) {
                 this.params.user_heating = this.params.user_heating/2;
@@ -64,7 +64,7 @@ class RaportBuilder {
             console.log(typeof data);
         });
         let raport = this.parser.replace(this.raportBody, this.params);
-        let title = `[Chorwacka 6/4] rozliczenie za miesiąc: ${this.params.month.name}/${this.params.month.year}`;
+        let title = `[Chorwacka 6/4] Rozliczenie opłat za miesiąc: ${this.params.month.name}/${this.params.month.year}`;
         return {subject: title, body: raport};
     }
 }

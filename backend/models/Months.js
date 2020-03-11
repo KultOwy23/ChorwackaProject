@@ -24,6 +24,7 @@ const monthSchema = new Schema({
     },
     comment: {
         type: String,
+        default: "Pole na komentarz",
     }
 });
 

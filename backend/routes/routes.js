@@ -25,9 +25,5 @@ app.get('/sendraport/:monthcode/user/:userid', (req, res) => {
         res.send('Message sent');
     }).catch((error) => console.log(error));
 })
-app.get('/bill/:monthid', (req, res) => res.send());
-app.put('/bill/:monthid', (req, res) => res.send());
-app.post('/bill', (req,res) => res.send());
-app.get('/raport/:monthid', (req, res) => res.send());
 
 module.exports = app;

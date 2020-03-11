@@ -9,8 +9,17 @@ class MonthRepo {
     }
 
     create(newMonth) {
-        const month = new this.model(newMonth);
-        return month.save();
+        this.findByMonthCode(newMonth.month_code).then((month) => {
+            if(month) {
+                return month;
+            } else {
+                const month = new this.model(newMonth);
+                month.save((err, month) => {
+                    if(err) console.log(err);
+                    return month; 
+                });
+            }
+        })
     }
 
     findAll() {
@@ -26,14 +35,21 @@ class MonthRepo {
         return this.model.findOne(query);
     }
 
+    findLastMonths() {
+        return this.model.find().sort({create_date: -1}).limit(2);
+    }
+
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.findOneAndUpdate(query, {$set: object});
+        return this.model.updateOne(query, {$set: object});
     }
 
     updateByMonthCode(monthCode, object) {
+        if(object.total_rent) {
+            object.total_rent = object.total_rent.toFixed(2)*1;
+        };
         const query = {month_code: monthCode};
-        return this.model.findOneAndUpdate(query, {$set: object});
+        return this.model.updateOne(query, {$set: object});
     }
     deleteById(id) {
         return this.model.findByIdAndDelete(id);
@@ -44,8 +60,15 @@ class ModelRepository{
         this.model = model;
     }
     create(newObject) {
-        const object = new this.model(newObject);
-        return object.save();
+        const {monthId} = newObject;
+        this.findByMonthId(monthId).then((month) => {
+            if(month) {
+                this.updateByMonthId(monthId,newObject);
+            } else {
+                const object = new this.model(newObject);
+                return object.save();
+            }
+        })
     }
     findAll() {
         return this.model.find();
@@ -63,12 +86,13 @@ class ModelRepository{
     }
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.findOneAndUpdate(query, { 
+        return this.model.updateOne(query, { 
             $set: object});
     }
     updateByMonthId(monthId, object) {
+        
         const query = {monthId: monthId};
-        return this.model.findOneAndUpdate(query, { 
+        return this.model.updateOne(query, { 
             $set: object});
     }
 };
@@ -87,6 +111,9 @@ class PriceRepo{
     findById(id) {
         return this.model.findById(id);
     }
+    findLast() {
+        return this.model.find().sort({validFrom: -1}).limit(1);
+    }
     findOne() {
         return this.model.findOne();
     }
@@ -95,7 +122,7 @@ class PriceRepo{
     }
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.findOneAndUpdate(query, { 
+        return this.model.updateOne(query, { 
             $set: object});
     }
 };

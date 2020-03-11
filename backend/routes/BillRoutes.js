@@ -6,11 +6,23 @@ const { BillsRepository } = Repositories;
 const { HeatingRepository } = Repositories;
 const { PricesRepository } = Repositories;
 
+const { CostCalculator } = require('../modules/CostCalculator');
+
 app.get('/months', (_,res) => {
     MonthRepository.findAll().then((months) => {
         res.json(months);
     }).catch((error) => console.log(error));
 });
+
+app.post('/newmonth/:monthcode', (req, res) => {
+    const { monthcode } = req.params;
+    const { meters } = req.body;
+    const { heating } = req.body;
+    const costCalculator = new CostCalculator(monthcode);
+    costCalculator.generateCosts(monthcode, meters, heating).then((data) => {
+        res.json(data);
+    }).catch((error) => console.log(error));
+})
 
 app.post('/months', (req, res) => {
     const { month } = req.body;
