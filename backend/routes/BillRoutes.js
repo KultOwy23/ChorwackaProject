@@ -18,6 +18,7 @@ app.post('/newmonth/:monthcode', (req, res) => {
     const { monthcode } = req.params;
     const { meters } = req.body;
     const { heating } = req.body;
+    const { comments } = req.body;
     const costCalculator = new CostCalculator(monthcode);
     costCalculator.generateCosts(monthcode, meters, heating).then((data) => {
         res.json(data);
@@ -75,6 +76,14 @@ app.post('/bills', (req, res) => {
     }).catch((error) => console.log(error));
 });
 
+app.delete('/bills/:id',(req,res) => {
+    const { id } = req.params;
+    BillsRepository.deleteById(id).then((ok) => {
+        res.json(ok);
+    }).catch((error) => console.log(error));
+})
+
+
 app.put('/bills/:id', (req, res) => {
     const { id } = req.params;
     const { bill } = req.body;
@@ -105,5 +114,12 @@ app.put('/heating/:id', (req, res) => {
             res.json(heating);
         }).catch((error) => console.log(error));
 });
+
+app.delete('/heating/:id', (req, res) => {
+    const { id } = req.params;
+    HeatingRepository.deleteById(id).then((heating) => {
+        res.json(heating);
+    }).catch((err) => console.log(err));
+})
 
 module.exports = app;
