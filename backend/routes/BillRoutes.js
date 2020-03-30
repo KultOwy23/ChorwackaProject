@@ -16,11 +16,9 @@ app.get('/months', (_,res) => {
 
 app.post('/newmonth/:monthcode', (req, res) => {
     const { monthcode } = req.params;
-    const { meters } = req.body;
-    const { heating } = req.body;
     const { comments } = req.body;
-    const costCalculator = new CostCalculator(monthcode);
-    costCalculator.generateCosts(monthcode, meters, heating).then((data) => {
+    const costCalculator = new CostCalculator(monthcode,comments);
+    costCalculator.generateCosts(monthcode, req.body).then((data) => {
         res.json(data);
     }).catch((error) => console.log(error));
 })

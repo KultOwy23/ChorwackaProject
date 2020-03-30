@@ -22,11 +22,11 @@ const MonthDictionary = {
 
 class CostCalculator{ 
     constructor(monthcode) {
-        const {monthname, year} = this.getMonthMeta(monthcode);
+        const {monthname, year} = this.getMonthMeta(monthcode, comment);
 
         console.log(`Month_NO: ${monthname}`);
         console.log(`Year: ${year}`);
-        MonthRepository.create({month_code: monthcode, name: monthname, year: year});
+        MonthRepository.create({month_code: monthcode, name: monthname, year: year, comment: comment});
         
     };
 
@@ -36,7 +36,9 @@ class CostCalculator{
         return {monthname: MonthDictionary[month_no], year: month_year};
     }
 
-    generateCosts(monthcode, meters, heatings) {
+    generateCosts(monthcode, meters, requestBody) {
+        const { meters } = requestBody;
+        const { heatings } = requestBody;
         return new Promise( async (resolve, reject) => {
             this.prices = await this.getLastPrices();
             const months = await this.getLastMonths();
@@ -129,6 +131,7 @@ class CostCalculator{
             });
         });
     }
+    
     //TODO: Consider the meters reset and some usage then.
     calculateRoomHeating(room, prevRoom, price) {
         let newRoom = {value: room.value, reset: room.reset};
