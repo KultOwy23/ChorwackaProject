@@ -36,9 +36,10 @@ class CostCalculator{
         return {monthname: MonthDictionary[month_no], year: month_year};
     }
 
-    generateCosts(monthcode, meters, requestBody) {
+    generateCosts(monthcode, requestBody) {
         const { meters } = requestBody;
         const { heatings } = requestBody;
+        const { comments } = requestBody;
         return new Promise( async (resolve, reject) => {
             this.prices = await this.getLastPrices();
             const months = await this.getLastMonths();

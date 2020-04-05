@@ -14,13 +14,38 @@ app.get('/months', (_,res) => {
     }).catch((error) => console.log(error));
 });
 
+app.post('/testmonths', (req, res) => {
+    res.json('just testmonhts')
+})
+app.post('/testmonths/:year/:month_id', (req, res) => {
+    const { year } = req.params;
+    const { month_id } = req.params;  
+    // const { month }
+    console.log(req.body);
+    console.log(`Year: ${year}, Month: ${month_id}`);
+    // console.log(month);
+    res.json(`Year: ${year}, Month: ${month_id}`);
+});
+
 app.post('/newmonth/:monthcode', (req, res) => {
     const { monthcode } = req.params;
-    const { comments } = req.body;
-    const costCalculator = new CostCalculator(monthcode,comments);
+    // const { comments } = req.body;
+    const costCalculator = new CostCalculator(monthcode,req.body);
     costCalculator.generateCosts(monthcode, req.body).then((data) => {
         res.json(data);
     }).catch((error) => console.log(error));
+});
+
+app.put('/months/:monthid', (req,res) => {
+    const { monthid } = req.params;
+    const { month } = req.body;
+    console.log(monthid);
+    console.log(month);
+    // res.json('ok');
+    // res.status(200).send('ok');
+    MonthRepository.updateById(monthid, month).then((ok) => {
+        res.json("Ok")
+    }).catch((err) => console.log(err));
 })
 
 app.post('/months', (req, res) => {

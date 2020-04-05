@@ -6,7 +6,9 @@ const monthSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    month_code: String,
+    month_id: {
+        type: Number,
+    },
     name: {
         type: String,
     },

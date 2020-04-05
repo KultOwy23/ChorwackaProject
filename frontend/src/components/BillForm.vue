@@ -2,26 +2,17 @@
     <div>
         <div class="month-header">
             <p v-if="!monthStarted">Wprowadź kod miesiąca</p>
-            <input type="number" class="input" :readonly="monthStarted" @keypress.enter="initMonth($event)" v-model="monthcode"/>/<input type="number" class="input" :readonly="monthStarted" @keypress.enter="initMonth($event)" v-model="monthcode"/>
+            <input type="text" class="input" :readonly="monthStarted" @keypress.enter="initMonth($event)" v-model="monthcode"/>
         </div>
-        <div id="newMonth" v-if="monthStarted">
-            <div id="meters"  v-if="meters.length">
-                <MeterInput 
-                    v-for="meter in meters"
-                    :key="meter.key"
-                    :meter="meter"
-                />
-            </div> 
-            <div id="heatings"  v-if="heatings.length">
-                <HeatingInput 
-                    v-for="heating in heatings"
-                    :key="heating.roomName"
-                    :heating="heating"
-                />
-            </div> 
-            <textarea placeholder="Dodatkowy komentarz..."/>
-            <button @click="showText()">Zapisz</button>
-            <button @click="reset()">Reset</button>
+        <div id="newMonth" class="new-month-form" v-if="monthStarted">
+            <MeterInput :meters="meters"/>
+            <hr>
+            <HeatingInput :heatings="heatings"/>
+            <textarea class="comment" v-model="comment" placeholder="Dodatkowy komentarz..."/>
+            <div class="buttons">
+                <button @click="save()">Zapisz</button>
+                <button @click="reset()">Reset</button>
+            </div>
         </div> 
     </div>
 
@@ -30,6 +21,9 @@
 <script>
 import MeterInput from './MeterInput.vue'
 import HeatingInput from './HeatingInput.vue'
+import axios from "axios"
+console.log(axios);
+
 export default {
     components: {
         MeterInput, HeatingInput
@@ -38,60 +32,35 @@ export default {
         return {
             test: 'Hello',
             monthStarted: false,
-            meters: [{
-                key: 'Prąd',
-                value: 123.0
+            monthcode: '',
+            comment: '',
+            meters: {
+                energy: 0.0,
+                hot_water: 0.0,
+                cold_water: 0.0,
+                gas: 0.0
             },
-            {
-                key: 'Ciepła woda',
-                value: 66.0
+            heatings: {
+                room1: {value: 0.0, reset: 0.0},
+                room2: {value: 0.0, reset: 0.0},
+                room3: {value: 0.0, reset: 0.0},
+                kitchen: {value: 0.0, reset: 0.0}
             },
-            {
-                key: 'Zimna woda',
-                value: 55.0
-            },
-            {
-                key: 'Gaz',
-                value: 66.0,
-            }
-            ],
-             heatings: [
-                {
-                    roomName: 'Pokój 1',
-                    oldValue: 100.0,
-                    oldValueReset: 21.0,
-                    newValue: 123.0,
-                    newValueReset: 21.0
-                },
-                {
-                    roomName: 'Pokój 2',
-                    oldValue: 100.0,
-                    oldValueReset: 21.0,
-                    newValue: 123.0,
-                    newValueReset: 21.0
-                },
-                {
-                    roomName: 'Pokój 3',
-                    oldValue: 100.0,
-                    oldValueReset: 21.0,
-                    newValue: 123.0,
-                    newValueReset: 21.0
-                },
-                {
-                    roomName: 'Kuchnia',
-                    oldValue: 100.0,
-                    oldValueReset: 21.0,
-                    newValue: 123.0,
-                    newValueReset: 21.0
-                }
-            ]
-
         }
     },
     methods: {
-        showText() {
-            this.monthStarted = true;
-            this.meters[0].value = 1.0;
+        save() {
+            console.log(this.monthcode)
+            var url = `/testmonths/${this.monthcode}`;
+            var month = {
+                meters: this.meters,
+                heatings: this.heatings,
+                comment: this.comment
+            }
+            console.log()
+            this.$http.post(url,{month: month}).then(response => {
+                console.log(response);
+            })
         },
         initMonth() {
             this.monthStarted = true;
@@ -106,7 +75,19 @@ export default {
 </script>
 
 <style>
+* {
+    margin: 5px
+}
  .month-header{
     text-align: center;
-}
+ }
+
+ .new-month-form {
+     text-align: center;
+ }
+
+ .comment {
+     display: inline-block;
+     width: 25%;
+ }
 </style>
