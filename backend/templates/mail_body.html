@@ -55,37 +55,51 @@
         <p>Stawka za ogrzewanie: <b>[prices.heating]</b> zł </p>
         <table style='width:50%'>
             <tr>
-                <th>Pokój</th>
-                <th>Przed resetem</th>
-                <th>Stan licznika</th>
-                <th>Zużycie</th>
-                <th>Kwota (zł)</th>
+                <th rowspan ='2'>Pokój</th>
+                <th colspan='2' scope='colgroup'>Aktualny miesiąc</th>
+                <th colspan='2' scope='colgroup'>Poprzedni miesiąc</th>
+                <th rowspan ='2'>Zużycie</th>
+                <th rowspan ='2'>Kwota (zł)</th>
+            </tr>
+            <tr>
+                <th scope='col'>Aktualny</th>
+                <th scope='col'>Reset</th>
+                <th scope='col'>Aktualny</th>
+                <th scope='col'>Reset</th>
             </tr>
             <tr>
                 <td>Pokój 1</td>
-                <td>[heating.room1.reset]</td>
                 <td>[heating.room1.value]</td>
+                <td>[heating.room1.reset]</td>
+                <td>[heating.room1.prevVal]</td>
+                <td>[heating.room1.prevReset]</td>
                 <td>[heating.room1.usage]</td>
                 <td>[heating.room1.cost]</td>
             </tr>
             <tr>
                 <td>Pokój 2</td>
-                <td>[heating.room2.reset]</td>
                 <td>[heating.room2.value]</td>
+                <td>[heating.room2.reset]</td>
+                <td>[heating.room2.prevVal]</td>
+                <td>[heating.room2.prevReset]</td>
                 <td>[heating.room2.usage]</td>
                 <td>[heating.room2.cost]</td>
             </tr>
             <tr>
                 <td>Pokój 3</td>
-                <td>[heating.room3.reset]</td>
                 <td>[heating.room3.value]</td>
+                <td>[heating.room3.reset]</td>
+                <td>[heating.room3.prevVal]</td>
+                <td>[heating.room3.prevReset]</td>
                 <td>[heating.room3.usage]</td>
                 <td>[heating.room3.cost]</td>
             </tr>
             <tr>
                 <td>Kuchnia</td>
-                <td>[heating.kitchen.reset]</td>
                 <td>[heating.kitchen.value]</td>
+                <td>[heating.kitchen.reset]</td>
+                <td>[heating.kitchen.prevVal]</td>
+                <td>[heating.kitchen.prevReset]</td>
                 <td>[heating.kitchen.usage]</td>
                 <td>[heating.kitchen.cost]</td>
             </tr>

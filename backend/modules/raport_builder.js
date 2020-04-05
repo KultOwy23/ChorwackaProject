@@ -15,9 +15,9 @@ class RaportBuilder {
         this.params = {};
     }
 
-    async loadRaportData(month_code) {
-        console.log(`LoadRaportdata ${month_code}`);
-        await MonthRepository.findByMonthCode(month_code).then((month) => {
+    async loadRaportData(monthquery) {
+        console.log(`LoadRaportdata ${monthquery}`);
+        await MonthRepository.findMonthByQuery(monthquery).then((month) => {
             this.params.month = month;
             this.month_id = month._id;
         }).catch((err) => console.log(err));

@@ -18,6 +18,12 @@ class UserRepository {
     findById(id) {
         return this.model.findById(id);
     }
+    
+    findByMail(mail) {
+        const query = {email: mail};
+        console.log(`Query: ${query.mail}`);
+        return this.model.findOne(query);
+    }
 
     deleteById(id) {
         return this.model.findByIdAndDelete(id);
@@ -25,7 +31,7 @@ class UserRepository {
 
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.findOneAndUpdate(query, object);
+        return this.model.findOneAndUpdate(query, {$set: object});
     }
 
     updateByEmail(emailAddress, object) {

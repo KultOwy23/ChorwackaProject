@@ -5,28 +5,15 @@ const { HeatingRepository } = Repositories;
 const { PricesRepository } = Repositories;
 
 //TODO: Reconsider the month schema structure.
-const MonthDictionary = {
-    "01": "Styczeń",
-    "02": "Luty",
-    "03": "Marzec",
-    "04": "Kwiecień",
-    "05": "Maj",
-    "06": "Czerwiec",
-    "07": "Lipiec",
-    "08": "Sierpień",
-    "09": "Wrzesień",
-    "10": "Październik",
-    "11": "Listopad",
-    "12": "Grudzień"
-};
+
 
 class CostCalculator{ 
-    constructor(monthcode) {
-        const {monthname, year} = this.getMonthMeta(monthcode, comment);
+    constructor(year, month) {
+        // const {monthname, year} = this.getMonthMeta(monthcode, comment);
 
-        console.log(`Month_NO: ${monthname}`);
-        console.log(`Year: ${year}`);
-        MonthRepository.create({month_code: monthcode, name: monthname, year: year, comment: comment});
+        // console.log(`Month_NO: ${monthname}`);
+        // console.log(`Year: ${year}`);
+        MonthRepository.create({year: year, month: month});
         
     };
 
@@ -36,25 +23,27 @@ class CostCalculator{
         return {monthname: MonthDictionary[month_no], year: month_year};
     }
 
-    generateCosts(monthcode, requestBody) {
+    generateCosts(year,month, requestBody) {
+        const monthQuery = {year: year, month: month};
         const { meters } = requestBody;
         const { heatings } = requestBody;
-        const { comments } = requestBody;
+        const { comment } = requestBody;
         return new Promise( async (resolve, reject) => {
             this.prices = await this.getLastPrices();
             const months = await this.getLastMonths();
             this.previousMonth = months[1];
             this.newMonth = months[0];
-            this.newMonth.total_rent = this.prices.rent;
+            this.newMonth.total_rent = this.prices.rent.toFixed(2)*1;
+            this.newMonth.comment = comment;
             this.calculateBills(meters, this.prices).then((billsPrice) => {
                 this.newMonth.total_bill = billsPrice.toFixed(2)*1;
-                this.newMonth.total_rent += billsPrice;
-                MonthRepository.updateByMonthCode(monthcode, this.newMonth).then((data) => {
+                this.newMonth.total_rent += billsPrice.toFixed(2)*1;
+                MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
                     console.log(data);
                     this.calculateHeating(heatings, this.prices).then((heatingCost) => {
                         this.newMonth.total_heat = heatingCost.toFixed(2)*1;
-                        this.newMonth.total_rent += heatingCost;
-                        MonthRepository.updateByMonthCode(monthcode, this.newMonth).then((data) => {
+                        this.newMonth.total_rent += heatingCost.toFixed(2)*1;
+                        MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
                             resolve(data)       
                         }).catch((error) => console.log(error));
                     }).catch((error) => console.log(error));
@@ -136,7 +125,13 @@ class CostCalculator{
     //TODO: Consider the meters reset and some usage then.
     calculateRoomHeating(room, prevRoom, price) {
         let newRoom = {value: room.value, reset: room.reset};
-        newRoom.usage = newRoom.value - prevRoom.value;
+        if(newRoom.value < prevRoom.value) {
+            newRoom.usage = newRoom.reset - prevRoom.value + newRoom.value
+        } else {
+            newRoom.usage = newRoom.value - prevRoom.value;
+        }
+        newRoom.prevVal = prevRoom.value;
+        newRoom.prevReset = prevRoom.reset;
         newRoom.cost = (newRoom.usage * price).toFixed(2)*1;
         return newRoom;
     }

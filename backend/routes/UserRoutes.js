@@ -27,10 +27,12 @@ app.delete('/', (req, res) => {
 
 app.put('/:id',(req,res) => {
     const { id } = req.params;
-    const {user} = req.body;
+    const { user } = req.body;
     repository.updateById(id, user)
-        .then(res.status(200).json(['ok']))
-        .catch((error) => console.log(error));
+        .then((user) => {
+            res.status(200).json(user)
+
+        }).catch((error) => console.log(error));
 })
 
 module.exports = app;

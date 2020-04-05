@@ -15,9 +15,9 @@ class MyMailer {
         });
     };
 
-    async sendRaportToUser(monthcode, user) {
+    async sendRaportToUser(monthquery, user) {
         let raportBuilder = new builder.RaportBuilder();
-        raportBuilder.loadRaportData(monthcode).then(async () => {
+        raportBuilder.loadRaportData(monthquery).then(async () => {
             let raport = raportBuilder.createRaport(user);
             let mailOptions = {
                 from: CONFIG.EMAIL_ADDRESS,

@@ -4,7 +4,7 @@ import axios from 'axios'
 import App from './App.vue'
 
 const http = axios.create({
-  baseURL: process.env.BACKEND_URL ? process.env.BACKEND_URL : 'http://localhost:3000/'
+  baseURL: process.env.BACKEND_URL ? process.env.BACKEND_URL : 'http://192.168.1.11:3000/'
 })
 
 Vue.prototype.$http = http;

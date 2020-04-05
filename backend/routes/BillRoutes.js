@@ -14,17 +14,30 @@ app.get('/months', (_,res) => {
     }).catch((error) => console.log(error));
 });
 
+app.get('/months/:year-:month', (req,res) => {
+    const { year } = req.params;
+    const { month } = req.params;
+    MonthRepository.findByYearAndMonth(year,month).then((month) => {
+        console.log(month);
+        res.json(month);
+    }).catch((err) => console.log(err));
+});
+
 app.post('/testmonths', (req, res) => {
     res.json('just testmonhts')
 })
-app.post('/testmonths/:year/:month_id', (req, res) => {
+app.post('/testmonths/:year-:monthid', (req, res) => {
     const { year } = req.params;
-    const { month_id } = req.params;  
-    // const { month }
-    console.log(req.body);
-    console.log(`Year: ${year}, Month: ${month_id}`);
+    const { monthid } = req.params;  
+    const { month } = req.body;
+    const costCalculator = new CostCalculator(year, monthid);
+    costCalculator.generateCosts(year, monthid, month).then((data) => {
+        res.json(data);
+    }).catch((error) => console.log(error));
+
+    // console.log(`Year: ${year}, Month: ${month_id}`);
     // console.log(month);
-    res.json(`Year: ${year}, Month: ${month_id}`);
+    // res.json(`Year: ${year}, Month: ${month_id}`);
 });
 
 app.post('/newmonth/:monthcode', (req, res) => {

@@ -7,25 +7,33 @@ const heatingSchema = new Schema({
         value: Number,
         reset: Number,
         usage: Number,
-        cost: Number
+        cost: Number,
+        prevVal: Number,
+        prevReset: Number
     },
     room2: {
         value: Number,
         reset: Number,
         usage: Number,
-        cost: Number
+        cost: Number,
+        prevVal: Number,
+        prevReset: Number
     },
     room3: {
         value: Number,
         reset: Number,
         usage: Number,
-        cost: Number
+        cost: Number,
+        prevVal: Number,
+        prevReset: Number
     },
     kitchen: {
         value: Number,
         reset: Number,
         usage: Number,
-        cost: Number
+        cost: Number,
+        prevVal: Number,
+        prevReset: Number
     }
 });
 

@@ -8,10 +8,11 @@
             <MeterInput :meters="meters"/>
             <hr>
             <HeatingInput :heatings="heatings"/>
-            <textarea class="comment" v-model="comment" placeholder="Dodatkowy komentarz..."/>
+            <textarea class="comment" rows="4" v-model="comment" placeholder="Dodatkowy komentarz..."/>
             <div class="buttons">
                 <button @click="save()">Zapisz</button>
                 <button @click="reset()">Reset</button>
+                <button @click="send()">Wyślij raport</button>
             </div>
         </div> 
     </div>
@@ -63,7 +64,13 @@ export default {
             })
         },
         initMonth() {
+            this.$http.get(`/months/${this.monthcode}`).then(response => {
+                console.log(response);
+            });
             this.monthStarted = true;
+        },
+        send() {
+            this.$http.get(`/sendraport/${this.monthcode}/user/jedrzej.zawojski@hotmail.com`);
         },
         reset() {
             this.monthStarted = false;
@@ -88,6 +95,6 @@ export default {
 
  .comment {
      display: inline-block;
-     width: 25%;
+     width: 100%;
  }
 </style>

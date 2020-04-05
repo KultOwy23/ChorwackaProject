@@ -3,16 +3,33 @@ const Month = require('../models/Months');
 const Prices = require('../models/Prices');
 const Heating = require('../models/Heatings');
 
+const MonthDictionary = {
+    1: "Styczeń",
+    2: "Luty",
+    3: "Marzec",
+    4: "Kwiecień",
+    5: "Maj",
+    6: "Czerwiec",
+    7: "Lipiec",
+    8: "Sierpień",
+    9: "Wrzesień",
+    10: "Październik",
+    11: "Listopad",
+    12: "Grudzień"
+};
+
 class MonthRepo {
     constructor(model) {
         this.model = model;
     }
-
+    
     create(newMonth) {
-        this.findByMonthCode(newMonth.month_code).then((month) => {
+        console.log(`create month: ${newMonth}`);
+        this.findByYearAndMonth(newMonth.year, newMonth.month).then((month) => {
             if(month) {
                 return month;
             } else {
+                newMonth.name = MonthDictionary[newMonth.month];
                 const month = new this.model(newMonth);
                 month.save((err, month) => {
                     if(err) console.log(err);
@@ -35,6 +52,15 @@ class MonthRepo {
         return this.model.findOne(query);
     }
 
+    findByYearAndMonth(year, month) {
+        const query = {year: year, month: month};
+        return this.model.findOne(query);
+    };
+
+    findMonthByQuery(query) {
+        return this.model.findOne(query);
+    };
+
     findLastMonths() {
         return this.model.find().sort({create_date: -1}).limit(2);
     }
@@ -42,6 +68,10 @@ class MonthRepo {
     updateById(id, object) {
         const query = { _id: id};
         return this.model.updateOne(query, {$set: object});
+    }
+
+    updateByMonthQuery(query, object) {
+        return this.model.updateOne(query,{$set: object});
     }
 
     updateByMonthCode(monthCode, object) {
