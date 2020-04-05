@@ -29,9 +29,9 @@ class MyMailer {
         }).catch((error) => console.log(error));
     }
 
-    async sendRaport(monthcode, users) {
+    async sendRaport(monthquery, users) {
         let raportBuilder = new builder.RaportBuilder();
-        raportBuilder.loadRaportData(monthcode).then( async () => {
+        raportBuilder.loadRaportData(monthquery).then( async () => {
             for(let i = 0; i< users.length; i++) {
                 let user = users[i];
                 console.log(`Send mailto: ${user.email}`);

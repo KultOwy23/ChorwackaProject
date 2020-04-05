@@ -8,14 +8,16 @@ const mailer = new mail.MyMailer();
 
 const userRepository = require('../repositories/UserRepository');
 
-app.get('/sendraport/:monthcode', (req,res) =>  {
-    const { monthcode } = req.params
+app.get('/sendraport/:year/:month', (req,res) =>  {
+    const { year } = req.params;
+    const { month } = req.params;
+    const monthQuery = {year: year, month: month};
     userRepository.findAll().then((users) => {
         console.log(`Sending to users: ${users}`);
-        mailer.sendRaport(monthcode, users);      
+        mailer.sendRaport(monthQuery, users);      
         res.status(200).json('Messages sent');
     }).catch((error) => console.log(error));
-})
+});
 // app.get('/sendraport/:monthcode/user/:userid', (req, res) => {
 //     const { userid } = req.params;
 //     const { monthcode } = req.params;
@@ -26,7 +28,7 @@ app.get('/sendraport/:monthcode', (req,res) =>  {
 //     }).catch((error) => console.log(error));
 // })
 
-app.get("/sendraport/:year-:month/user/:usermail", (req, res) => {
+app.get("/sendraport/:year/:month/user/:usermail", (req, res) => {
     const { year } = req.params;
     const { month } = req.params;
     const { usermail } = req.params;

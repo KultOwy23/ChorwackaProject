@@ -2,19 +2,19 @@
 <div id="meters">
     <div>
         <span>Prąd</span>
-        <input type="number" class="input" v-model="meters.energy">
+        <input type="Number" class="input" v-model="meters.energy.value">
     </div>
     <div>
         <span>Ciepła woda</span>
-        <input type="number" class="input" v-model="meters.hot_water">
+        <input type="Number" class="input" v-model="meters.hot_water.value">
     </div>
     <div>
         <span>Zimna woda</span>
-        <input type="number" class="input" v-model="meters.cold_water">
+        <input type="Number" class="input" v-model="meters.cold_water.value">
     </div>
     <div>
         <span>Gaz</span>
-        <input type="number" class="input" v-model="meters.gas">
+        <input type="Number" class="input" v-model="meters.gas.value">
     </div>
 </div>
 </template>

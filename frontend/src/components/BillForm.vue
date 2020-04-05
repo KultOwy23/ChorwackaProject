@@ -36,17 +36,17 @@ export default {
             monthcode: '',
             comment: '',
             meters: {
-                energy: 0.0,
-                hot_water: 0.0,
-                cold_water: 0.0,
-                gas: 0.0
+                energy: {value: 0.0},
+                hot_water: {value: 0.0},
+                cold_water: {value: 0.0},
+                gas: {value: 0.0}
             },
             heatings: {
                 room1: {value: 0.0, reset: 0.0},
                 room2: {value: 0.0, reset: 0.0},
                 room3: {value: 0.0, reset: 0.0},
                 kitchen: {value: 0.0, reset: 0.0}
-            },
+            }
         }
     },
     methods: {
@@ -64,13 +64,36 @@ export default {
             })
         },
         initMonth() {
+            console.log(`URL: /months/${this.monthcode}`);
             this.$http.get(`/months/${this.monthcode}`).then(response => {
                 console.log(response);
+                const month = response.data.month;
+                console.log(month == null);
+                // console.log
+                if(month != null) {
+                    this.meters = response.data.meters;
+                    this.heatings = response.data.heatings;
+                    this.comment = response.data.month.comment;
+                } else {
+                    this.meters = {
+                        energy: {value: 0.0},
+                        hot_water: {value: 0.0},
+                        cold_water: {value: 0.0},
+                        gas: {value: 0.0}
+                    };
+                    this.heatings = {
+                        room1: {value: 0.0, reset: 0.0},
+                        room2: {value: 0.0, reset: 0.0},
+                        room3: {value: 0.0, reset: 0.0},
+                        kitchen: {value: 0.0, reset: 0.0}
+                    };
+                    this.comment = null;
+                }
             });
             this.monthStarted = true;
         },
         send() {
-            this.$http.get(`/sendraport/${this.monthcode}/user/jedrzej.zawojski@hotmail.com`);
+            this.$http.get(`/sendraport/${this.monthcode}`);
         },
         reset() {
             this.monthStarted = false;

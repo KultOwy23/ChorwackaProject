@@ -8,19 +8,35 @@ const { PricesRepository } = Repositories;
 
 const { CostCalculator } = require('../modules/CostCalculator');
 
-app.get('/months', (_,res) => {
+app.get('/allmonths', (_,res) => {
     MonthRepository.findAll().then((months) => {
         res.json(months);
     }).catch((error) => console.log(error));
 });
 
-app.get('/months/:year-:month', (req,res) => {
+
+app.get('/months/:year/:month', (req,res) => {
     const { year } = req.params;
     const { month } = req.params;
     MonthRepository.findByYearAndMonth(year,month).then((month) => {
-        console.log(month);
-        res.json(month);
+        // console.log(month);
+        if(month) {
+            console.log('Return month');
+            var response = {month: month};
+            BillsRepository.findByMonthId(month._id).then((bills) => {
+                response.meters = bills;
+                HeatingRepository.findByMonthId(month._id).then((heating) => {
+                    response.heatings = heating;
+                    res.json(response);
+                }).catch((err) => console.log(err));
+            }).catch((err) => console.log(err));
+            // console.log(month);
+            // res.json(month);
+        } else {
+            res.json({month: month});
+        }
     }).catch((err) => console.log(err));
+
 });
 
 app.post('/testmonths', (req, res) => {

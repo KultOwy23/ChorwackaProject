@@ -24,7 +24,6 @@ class MonthRepo {
     }
     
     create(newMonth) {
-        console.log(`create month: ${newMonth}`);
         this.findByYearAndMonth(newMonth.year, newMonth.month).then((month) => {
             if(month) {
                 return month;
@@ -67,11 +66,11 @@ class MonthRepo {
 
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.updateOne(query, {$set: object});
+        return this.model.findOneAndUpdate(query, {$set: object});
     }
 
     updateByMonthQuery(query, object) {
-        return this.model.updateOne(query,{$set: object});
+        return this.model.findOneAndUpdate(query,{$set: object});
     }
 
     updateByMonthCode(monthCode, object) {
@@ -79,7 +78,7 @@ class MonthRepo {
             object.total_rent = object.total_rent.toFixed(2)*1;
         };
         const query = {month_code: monthCode};
-        return this.model.updateOne(query, {$set: object});
+        return this.model.findOneAndUpdate(query, {$set: object});
     }
     deleteById(id) {
         return this.model.findByIdAndDelete(id);
@@ -90,10 +89,12 @@ class ModelRepository{
         this.model = model;
     }
     create(newObject) {
-        const {monthId} = newObject;
-        this.findByMonthId(monthId).then((month) => {
-            if(month) {
-                this.updateByMonthId(monthId,newObject);
+        const { monthId } = newObject;
+        // console.log(`New object: ${monthId}`);
+        this.findByMonthId(monthId).then((found) => {
+            if(found) {
+                return this.updateByMonthId(monthId,newObject);
+                // console.log(object);
             } else {
                 const object = new this.model(newObject);
                 return object.save();
@@ -116,14 +117,15 @@ class ModelRepository{
     }
     updateById(id, object) {
         const query = { _id: id};
-        return this.model.updateOne(query, { 
-            $set: object});
+        // console.log('Update object');
+        // console.log(object);
+        return this.model.findOneAndUpdate(query, {$set: object});
     }
     updateByMonthId(monthId, object) {
-        
+        // console.log(`Update object: ${monthId}`);
+        // console.log(object);
         const query = {monthId: monthId};
-        return this.model.updateOne(query, { 
-            $set: object});
+        return this.model.findOneAndUpdate(query, {$set: object});
     }
 };
 

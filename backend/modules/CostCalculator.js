@@ -39,7 +39,7 @@ class CostCalculator{
                 this.newMonth.total_bill = billsPrice.toFixed(2)*1;
                 this.newMonth.total_rent += billsPrice.toFixed(2)*1;
                 MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
-                    console.log(data);
+                    // console.log(data);
                     this.calculateHeating(heatings, this.prices).then((heatingCost) => {
                         this.newMonth.total_heat = heatingCost.toFixed(2)*1;
                         this.newMonth.total_rent += heatingCost.toFixed(2)*1;
@@ -78,10 +78,10 @@ class CostCalculator{
         return new Promise((resolve,reject) => {
             BillsRepository.findByMonthId(previousMonthId).then((prevMonthBills) => {
                 let newBill = {monthId: newMonthId, energy: {}, hot_water: {}, cold_water: {}, gas: {}};
-                newBill.energy = this.calculateUsage(meters.energy*1, prevMonthBills.energy.value, prices.energy);
-                newBill.hot_water = this.calculateUsage(meters.hot_water, prevMonthBills.hot_water.value, prices.hot_water);
-                newBill.cold_water = this.calculateUsage(meters.cold_water, prevMonthBills.cold_water.value, prices.cold_water);
-                newBill.gas = this.calculateUsage(meters.gas, prevMonthBills.gas.value, prices.gas);
+                newBill.energy = this.calculateUsage(meters.energy.value*1, prevMonthBills.energy.value, prices.energy);
+                newBill.hot_water = this.calculateUsage(meters.hot_water.value*1, prevMonthBills.hot_water.value, prices.hot_water);
+                newBill.cold_water = this.calculateUsage(meters.cold_water.value*1, prevMonthBills.cold_water.value, prices.cold_water);
+                newBill.gas = this.calculateUsage(meters.gas.value, prevMonthBills.gas.value*1, prices.gas);
                 BillsRepository.create(newBill);
                 resolve(newBill.energy.cost + newBill.hot_water.cost + newBill.cold_water.cost + newBill.gas.cost)
             }).catch((error) => {
@@ -124,7 +124,7 @@ class CostCalculator{
     
     //TODO: Consider the meters reset and some usage then.
     calculateRoomHeating(room, prevRoom, price) {
-        let newRoom = {value: room.value, reset: room.reset};
+        let newRoom = {value: room.value*1, reset: room.reset*1};
         if(newRoom.value < prevRoom.value) {
             newRoom.usage = newRoom.reset - prevRoom.value + newRoom.value
         } else {
