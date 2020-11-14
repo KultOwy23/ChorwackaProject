@@ -23,30 +23,33 @@ class CostCalculator{
         return {monthname: MonthDictionary[month_no], year: month_year};
     }
 
-    generateCosts(year,month, requestBody) {
+    generateCosts(year,month,requestBody) {
+        console.log('Generate costs');
         const monthQuery = {year: year, month: month};
         const { meters } = requestBody;
         const { heatings } = requestBody;
         const { comment } = requestBody;
         return new Promise( async (resolve, reject) => {
             this.prices = await this.getLastPrices();
-            const months = await this.getLastMonths();
+            const months = await this.getLastMonths(month);
             this.previousMonth = months[1];
             this.newMonth = months[0];
             this.newMonth.total_rent = this.prices.rent.toFixed(2)*1;
             this.newMonth.comment = comment;
+            console.log('Setup bills');
             this.calculateBills(meters, this.prices).then((billsPrice) => {
                 this.newMonth.total_bill = billsPrice.toFixed(2)*1;
                 this.newMonth.total_rent += billsPrice.toFixed(2)*1;
                 MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
-                    // console.log(data);
-                    this.calculateHeating(heatings, this.prices).then((heatingCost) => {
-                        this.newMonth.total_heat = heatingCost.toFixed(2)*1;
-                        this.newMonth.total_rent += heatingCost.toFixed(2)*1;
-                        MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
-                            resolve(data)       
+                    if(heatings) {
+                        this.calculateHeating(heatings, this.prices).then((heatingCost) => {
+                            this.newMonth.total_heat = heatingCost.toFixed(2)*1;
+                            this.newMonth.total_rent += heatingCost.toFixed(2)*1;
+                            MonthRepository.updateByMonthQuery(monthQuery, this.newMonth).then((data) => {
+                                resolve(data)       
+                            }).catch((error) => console.log(error));
                         }).catch((error) => console.log(error));
-                    }).catch((error) => console.log(error));
+                    }
                     resolve(data);
                 }).catch((error) => console.log(error));
             });
@@ -61,8 +64,8 @@ class CostCalculator{
         });
     };
 
-    getLastMonths() {
-        this.lastMonth = MonthRepository.findLastMonths();
+    getLastMonths(month) {
+        this.lastMonth = MonthRepository.findLastMonths(month)
         return new Promise((resolve, reject) => {
             this.lastMonth.then((months) => {
                 resolve(months);

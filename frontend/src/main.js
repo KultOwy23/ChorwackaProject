@@ -4,7 +4,7 @@ import axios from 'axios'
 import App from './App.vue'
 
 const http = axios.create({
-  baseURL: process.env.BACKEND_URL ? process.env.BACKEND_URL : 'http://192.168.1.11:3000/'
+  baseURL: process.env.BACKEND_URL ? process.env.BACKEND_URL : 'http://192.168.43.231:3000/'
 })
 
 Vue.prototype.$http = http;
@@ -12,6 +12,6 @@ Vue.prototype.$http = http;
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
-new Vue({
+new Vue({ 
   render: h => h(App),
 }).$mount('#app')

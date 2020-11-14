@@ -16,7 +16,7 @@ app.post('/', (req, res) => {
     }).catch((error) => console.log(error));
 });
 
-app.delete('/', (req, res) => {
+app.delete('/:id', (req, res) => {
     const { id } = req.params;
     repository.deleteById(id).then((ok) => {
         console.log(ok);

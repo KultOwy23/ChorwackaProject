@@ -21,7 +21,7 @@ mongoose.connect(CONFIG.DB, {
     useUnifiedTopology: true,
     useFindAndModify: false
 });
-// mongoose.set('debug',true);
+mongoose.set('debug',true);
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());

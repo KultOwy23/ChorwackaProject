@@ -42,7 +42,7 @@ app.get('/months/:year/:month', (req,res) => {
 app.post('/testmonths', (req, res) => {
     res.json('just testmonhts')
 })
-app.post('/testmonths/:year-:monthid', (req, res) => {
+app.post('/months/:year/:monthid', (req, res) => {
     const { year } = req.params;
     const { monthid } = req.params;  
     const { month } = req.body;
@@ -50,15 +50,10 @@ app.post('/testmonths/:year-:monthid', (req, res) => {
     costCalculator.generateCosts(year, monthid, month).then((data) => {
         res.json(data);
     }).catch((error) => console.log(error));
-
-    // console.log(`Year: ${year}, Month: ${month_id}`);
-    // console.log(month);
-    // res.json(`Year: ${year}, Month: ${month_id}`);
 });
 
 app.post('/newmonth/:monthcode', (req, res) => {
     const { monthcode } = req.params;
-    // const { comments } = req.body;
     const costCalculator = new CostCalculator(monthcode,req.body);
     costCalculator.generateCosts(monthcode, req.body).then((data) => {
         res.json(data);
@@ -70,8 +65,6 @@ app.put('/months/:monthid', (req,res) => {
     const { month } = req.body;
     console.log(monthid);
     console.log(month);
-    // res.json('ok');
-    // res.status(200).send('ok');
     MonthRepository.updateById(monthid, month).then((ok) => {
         res.json("Ok")
     }).catch((err) => console.log(err));

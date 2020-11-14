@@ -2,7 +2,7 @@
     <div>
         <div class="month-header">
             <p v-if="!monthStarted">Wprowadź kod miesiąca</p>
-            <input type="text" class="input" :readonly="monthStarted" @keypress.enter="initMonth($event)" v-model="monthcode"/>
+            <input type="text" class="input" @keypress.enter="initMonth($event)" v-model="monthcode"/>
         </div>
         <div id="newMonth" class="new-month-form" v-if="monthStarted">
             <MeterInput :meters="meters"/>
@@ -52,7 +52,7 @@ export default {
     methods: {
         save() {
             console.log(this.monthcode)
-            var url = `/testmonths/${this.monthcode}`;
+            var url = `/months/${this.monthcode}`;
             var month = {
                 meters: this.meters,
                 heatings: this.heatings,
